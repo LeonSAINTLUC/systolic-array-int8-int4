@@ -17,7 +17,7 @@ and the integer results are checked bit-exactly against a Python golden model.
 
 ## Progress
 - [x] PyTorch basics and FP32 CNN on MNIST
-- [ ] FP32 CNN on CIFAR-10
+- [x] FP32 CNN on CIFAR-10
 - [ ] INT8 PE with self-checking testbench
 - [ ] Manual quantization (INT8, INT4, per-tensor / per-channel)
 - [ ] Accuracy comparison FP32 / INT8 / INT4
@@ -41,7 +41,7 @@ and the integer results are checked bit-exactly against a Python golden model.
 
 ## How to run
 ### Training (Python)
-1. Open `python/notebooks/01_mnist_fp32.ipynb` in Google Colab.
+1. Open `python/notebooks/01_mnist_fp32.ipynb` (or an other notebook) in Google Colab.
 2. Select a GPU runtime (*Runtime → Change runtime type → T4 GPU*).
 3. Run all cells. MNIST is downloaded automatically.
 
@@ -54,11 +54,16 @@ and the integer results are checked bit-exactly against a Python golden model.
 | Dataset | Model | Parameters | Size (FP32) | Test accuracy |
 |---------|-------|------------|-------------|---------------|
 | MNIST | 2 conv + 2 fc | 421,642 | 1.7 MB | 99.08% |
+| CIFAR10 | 3 conv + 2 fc | 620,586 | 2.5 MB | 84.60% |
 
-Trained for 3 epochs (Adam, lr = 0.001, batch size 64): 51 s on a T4 GPU.
+MNIST trained for 3 epochs (Adam, lr = 0.001, batch size 64): 51 s on a T4 GPU.
+CIFAR10 trained for 30 epochs (Adam, lr = 0.001,weight_decay=0.0005, batch size 64): 6 min on a T4 GPU.
 
 ## References
 - Jacob et al., *Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference*, CVPR 2018. https://arxiv.org/abs/1712.05877
 - Nagel et al., *A White Paper on Neural Network Quantization*, 2021. https://arxiv.org/abs/2106.08295
 - Jouppi et al., *In-Datacenter Performance Analysis of a Tensor Processing Unit*, ISCA 2017. https://arxiv.org/abs/1704.04760
 - Sze et al., *Efficient Processing of Deep Neural Networks: A Tutorial and Survey*, Proc. IEEE 2017. https://arxiv.org/abs/1703.09039
+
+- PyTorch Tutorials, *Learn the Basics*. https://docs.pytorch.org/tutorials/beginner/basics/intro.html
+- torchvision documentation, *Transforming and augmenting images*. https://docs.pytorch.org/vision/stable/transforms.html
