@@ -18,7 +18,7 @@ and the integer results are checked bit-exactly against a Python golden model.
 ## Progress
 - [x] PyTorch basics and FP32 CNN on MNIST
 - [x] FP32 CNN on CIFAR-10
-- [ ] INT8 PE with self-checking testbench
+- [x] INT8 PE with self-checking testbench
 - [ ] Manual quantization (INT8, INT4, per-tensor / per-channel)
 - [ ] Accuracy comparison FP32 / INT8 / INT4
 - [ ] 4×4 systolic array verified on random matrices and edge cases
@@ -37,16 +37,19 @@ and the integer results are checked bit-exactly against a Python golden model.
 
 ## Design choices
 - **Dataflow:** output-stationary (planned)
-- **Arithmetic:** signed symmetric INT8, accumulator width `ACC_W` (parameter)
+- **Arithmetic:** signed symmetric INT8, accumulator width `ACC_W` (parameter), input width `DATA_W` (parameter)
 
 ## How to run
 ### Training (Python)
 1. Open `python/notebooks/01_mnist_fp32.ipynb` (or an other notebook) in Google Colab.
 2. Select a GPU runtime (*Runtime → Change runtime type → T4 GPU*).
-3. Run all cells. MNIST is downloaded automatically.
+3. Run all cells. MNIST(or CIFAR10) is downloaded automatically.
 
 ### Simulation (SystemVerilog)
-*To be completed.*
+1. Download Verilator 5.0> and GTK Wave
+2. Launch the script `pe_int8_tb.sv` (need wsl for Windows)
+3. If the test are passed. PASS will be display else FAIL is display with an error description
+
 
 ## Results
 ### FP32 baseline
@@ -58,6 +61,18 @@ and the integer results are checked bit-exactly against a Python golden model.
 
 MNIST trained for 3 epochs (Adam, lr = 0.001, batch size 64): 51 s on a T4 GPU.
 CIFAR10 trained for 30 epochs (Adam, lr = 0.001,weight_decay=0.0005, batch size 64): 6 min on a T4 GPU.
+
+### PE verification
+
+Run with `scripts/sim_pe_int8.sh [options]`.
+
+| Test configuration | Purpose | Expected result | Observed |
+|--------------------|---------|-----------------|----------|
+| (default) |Functional tests: forwarding, signed products, marker, 576-MAC accumulation| PASS | PASS |
+|--x-initial unique|Start-up without reset: registers start with random values (Verilator is 2-state; a 4-state simulator would show X)| PASS | PASS |
+|-GACC_W=23|Verify overflow when the accumulator value reach its max| FAIL | FAIL |
+|-GDATA_W=4 (change the value test to match INT4 requirement)|PE is working in INT4| PASS | PASS |
+
 
 ## References
 - Jacob et al., *Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference*, CVPR 2018. https://arxiv.org/abs/1712.05877

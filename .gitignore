@@ -1,1 +1,9 @@
+# Personal files
+
 docs/note.txt
+
+# Simulation outputs
+build/
+obj_dir/
+*.vcd
+*.fst
