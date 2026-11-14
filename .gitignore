@@ -7,3 +7,11 @@ build/
 obj_dir/
 *.vcd
 *.fst
+
+# Python librairies
+/.venv/
+
+# Datasets
+
+/.data/
+/python/notebook/data/
