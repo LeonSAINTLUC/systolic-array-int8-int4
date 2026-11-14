@@ -11,7 +11,11 @@ obj_dir/
 # Python librairies
 /.venv/
 
-# Datasets
+# Python cache
+__pycache__/
+*.pyc
 
+# Datasets
+data/
 /.data/
-/python/notebook/data/
+/python/notebooks/data/
